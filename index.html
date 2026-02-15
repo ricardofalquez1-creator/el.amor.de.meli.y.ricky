@@ -26,8 +26,8 @@
         #word-wall { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .floating-word {
             position: absolute; color: var(--pink); font-weight: bold; opacity: 0;
-            white-space: nowrap; font-size: 1.2rem; animation: floatUp 10s linear forwards;
-            z-index: 1;
+            white-space: nowrap; font-size: 1.2rem; animation: floatUp 15s linear infinite;
+            z-index: 1; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         @keyframes floatUp {
             0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
@@ -36,30 +36,42 @@
             100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
         }
 
-        /* --- CARRUSEL POLAROID (10 FOTOS) --- */
-        .carousel-container {
-            width: 260px; height: 320px;
-            margin-top: 20px; z-index: 10;
-            perspective: 1000px;
+        /* --- LLUVIA DE CORAZONES --- */
+        .heart-particle {
+            position: fixed; top: -10px; color: #ff4d6d; font-size: 20px;
+            user-select: none; pointer-events: none; z-index: 1000;
+            animation: fall linear forwards;
         }
-        .carousel-track {
-            display: flex;
-            width: 1000%; /* 100% por cada una de las 10 fotos */
-            height: 100%;
-            animation: slide-10 40s infinite ease-in-out;
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        /* --- CONTADORES --- */
+        .dashboard { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; z-index: 10; margin-top: 10px; }
+        .heart-clock { position: relative; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .heart-shape { position: absolute; width: 100%; height: 100%; fill: white; filter: drop-shadow(0 5px 10px rgba(255, 77, 109, 0.1)); z-index: -1; }
+        .days-value { font-size: 1.5rem; font-weight: 900; color: var(--pink); margin: 0; }
+        .label { font-size: 0.5rem; font-weight: bold; text-transform: uppercase; margin-top: 4px; color: #555; }
+
+        /* --- SPOTIFY PLAYER --- */
+        .spotify-container { 
+            margin: 20px 0; z-index: 20; width: 95%; max-width: 350px; 
+            border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-        .polaroid {
-            background: white;
-            padding: 10px 10px 40px 10px;
-            margin: 10px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            border-radius: 2px;
-            transform: rotate(calc(-2deg + 4deg * Math.random())); /* Rotación natural */
+
+        /* --- BOTÓN JUGAR --- */
+        .play-btn {
+            background: #5d3fd3; color: white; border: none; padding: 12px 35px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; text-decoration: none;
+            font-size: 14px; margin: 10px 0 25px 0; z-index: 20;
+            box-shadow: 0 5px 15px rgba(93, 63, 211, 0.3); transition: 0.3s;
         }
-        .polaroid img {
-            width: 240px; height: 240px; object-fit: cover;
-            border: 1px solid #f0f0f0;
-        }
+        .play-btn:hover { transform: scale(1.05); background: #4b32ac; }
+
+        /* --- CARRUSEL POLAROID (REDUCIDO -50px) --- */
+        .carousel-container { width: 210px; height: 270px; margin-top: 5px; z-index: 10; perspective: 1000px; }
+        .carousel-track { display: flex; width: 1000%; height: 100%; animation: slide-10 40s infinite ease-in-out; }
+        .polaroid { background: white; padding: 10px 10px 40px 10px; margin: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-radius: 2px; }
+        .polaroid img { width: 190px; height: 190px; object-fit: cover; border: 1px solid #f0f0f0; cursor: pointer; transition: 0.2s; }
+        .polaroid img:hover { transform: scale(1.05); }
 
         @keyframes slide-10 {
             0%, 8% { transform: translateX(0); }
@@ -75,34 +87,21 @@
             100% { transform: translateX(0); }
         }
 
-        /* --- BOTONES Y UI --- */
-        .play-btn {
-            background: #5d3fd3; color: white; border: none; padding: 12px 35px;
-            border-radius: 50px; font-weight: bold; cursor: pointer; text-decoration: none;
-            font-size: 14px; margin: 20px 0; z-index: 20;
-            box-shadow: 0 5px 15px rgba(93, 63, 211, 0.3); transition: 0.3s;
+        /* --- VISOR DE FOTOS --- */
+        #visor-fotos {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 2000;
+            justify-content: center; align-items: center; cursor: zoom-out;
         }
-        .play-btn:hover { transform: scale(1.05); background: #4b32ac; }
+        #foto-grande { max-width: 90%; max-height: 80vh; border: 5px solid white; border-radius: 5px; box-shadow: 0 0 30px rgba(255, 77, 109, 0.4); }
 
-        .dashboard { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; z-index: 10; }
-        .heart-clock { position: relative; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .heart-shape { position: absolute; width: 100%; height: 100%; fill: white; filter: drop-shadow(0 5px 10px rgba(255, 77, 109, 0.1)); z-index: -1; }
-        
-        .days-value { font-size: 1.5rem; font-weight: 900; color: var(--pink); margin: 0; }
-        .label { font-size: 0.5rem; font-weight: bold; text-transform: uppercase; margin-top: 4px; color: #555; }
-
-        .input-container {
-            margin: 25px 0; display: flex; gap: 8px; z-index: 20;
-            background: white; padding: 6px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+        /* --- MENSAJES --- */
+        .input-container { margin: 25px 0; display: flex; gap: 8px; z-index: 20; background: white; padding: 6px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         input { border: none; padding: 8px 15px; border-radius: 50px; outline: none; width: 160px; }
-        .send-btn { background: var(--pink); color: white; border: none; padding: 8px 18px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        .send-btn { background: var(--pink); color: white; border: none; padding: 8px 18px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .send-btn:hover { background: #e03c5a; transform: scale(1.05); }
 
-        #forever-overlay {
-            display: none; position: fixed; inset: 0; background: var(--pink);
-            color: white; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 1000; text-align: center;
-        }
+        #forever-overlay { display: none; position: fixed; inset: 0; background: var(--pink); color: white; flex-direction: column; justify-content: center; align-items: center; z-index: 3000; text-align: center; }
     </style>
 </head>
 <body>
@@ -111,39 +110,47 @@
 
     <h1>Contador de nuestra historia</h1>
 
-    <div class="carousel-container">
-        <div class="carousel-track">
-            <div class="polaroid"><img src="FOTO1.jpg"></div>
-            <div class="polaroid"><img src="FOTO2.jpg"></div>
-            <div class="polaroid"><img src="FOTO3.jpg"></div>
-            <div class="polaroid"><img src="FOTO4.jpg"></div>
-            <div class="polaroid"><img src="FOTO5.jpg"></div>
-            <div class="polaroid"><img src="FOTO6.jpg"></div>
-            <div class="polaroid"><img src="FOTO7.jpg"></div>
-            <div class="polaroid"><img src="FOTO8.jpg"></div>
-            <div class="polaroid"><img src="FOTO9.jpg"></div>
-            <div class="polaroid"><img src="FOTO10.jpg"></div>
-        </div>
-    </div>
-
-    <a href="LINK_DE_GENIALLY" target="_blank" class="play-btn">🎮 JUGAR</a>
-
     <div class="dashboard">
         <div class="heart-clock">
             <svg class="heart-shape" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-met">0</p>
-            <p class="label">Conocernos</p>
+            <p class="label">Días de conocernos</p>
         </div>
         <div class="heart-clock">
             <svg class="heart-shape" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-out">0</p>
-            <p class="label">1ra Cita</p>
+            <p class="label">Días desde nuestra primera cita</p>
         </div>
         <div class="heart-clock">
             <svg class="heart-shape" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-gf">0</p>
-            <p class="label">Novios</p>
+            <p class="label">Días desde que somos novios</p>
         </div>
+    </div>
+
+    <div class="spotify-container">
+        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5Nf8YaO5XmmCXB0IovkS7v?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <a href="LINK_DE_GENIALLY" target="_blank" class="play-btn">🎮 JUGAR</a>
+
+    <div class="carousel-container">
+        <div class="carousel-track">
+            <div class="polaroid"><img src="FOTO1.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO2.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO3.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO4.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO5.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO6.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO7.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO8.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO9.jpg" onclick="abrirFoto(this.src)"></div>
+            <div class="polaroid"><img src="FOTO10.jpg" onclick="abrirFoto(this.src)"></div>
+        </div>
+    </div>
+
+    <div id="visor-fotos" onclick="cerrarFoto()">
+        <img id="foto-grande" src="">
     </div>
 
     <div class="input-container">
@@ -151,16 +158,16 @@
         <button class="send-btn" onclick="enviarMensaje()">Postear</button>
     </div>
 
-    <button onclick="darDeBaja()" style="background:none; border:none; color:#bbb; font-size:10px; cursor:pointer;">Desuscribirse</button>
+    <button onclick="darDeBaja()" style="background:none; border:none; color:#bbb; font-size:10px; cursor:pointer; opacity: 0.5;">Desuscribirse</button>
 
     <div id="forever-overlay">
         <h2>ERROR 237</h2>
-        <p>¡Patricia Fernández, venga para acá!</p>
-        <button onclick="cerrar()" style="margin-top:20px; padding:10px 20px;">Volver</button>
+        <p>¡Patricia Fernández, venga para acá! Usted no se va pa´ ningún lado, mi amor por usted es infinito</p>
+        <button onclick="cerrar()" style="margin-top:20px; padding:10px 20px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer;">Volver</button>
     </div>
 
 <script>
-    // 1. CONFIGURACIÓN FIREBASE (Tus datos reales ya están aquí)
+    // 1. CONFIGURACIÓN FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyAWDuppxTJ0YH3PMgy8zERSsZ5CjRI2O-g",
         authDomain: "regalosanvalentin-488f4.firebaseapp.com",
@@ -168,31 +175,41 @@
         projectId: "regalosanvalentin-488f4",
         storageBucket: "regalosanvalentin-488f4.firebasestorage.app",
         messagingSenderId: "606948409590",
-        appId: "1:606948409590:web:93151713372f334eeb2cd7",
-        measurementId: "G-9SVF9WZR9M"
+        appId: "1:606948409590:web:93151713372f334eeb2cd7"
     };
-
-    // 2. INICIALIZACIÓN
-    // Usamos el modo compat para que no te dé errores de "import"
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // 3. LÓGICA DEL MURO
+    // 2. EFECTO LLUVIA
+    function lluviaDeCorazones() {
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, i * 100);
+        }
+    }
+
+    // 3. ENVÍO DE MENSAJES
     function enviarMensaje() {
         const input = document.getElementById('mensajeInput');
-        const llaveMaestra = "CocacolaSprite"; // Asegúrate que esta clave esté en tus reglas de Firebase
-        
         if(input.value.trim() !== "") {
+            lluviaDeCorazones();
             database.ref('muro').push({
                 texto: input.value,
                 x: Math.random() * 80 + 10,
-                pass: llaveMaestra
-            }).catch(e => console.error("Error al enviar:", e));
+                pass: "CocacolaSprite"
+            });
             input.value = '';
         }
     }
 
-    // Escuchar mensajes nuevos
+    // Escuchar mensajes en vivo
     database.ref('muro').on('child_added', (snapshot) => {
         const data = snapshot.val();
         if(data && data.texto) {
@@ -201,34 +218,30 @@
             el.innerText = data.texto;
             el.style.left = data.x + '%';
             document.getElementById('word-wall').appendChild(el);
-            setTimeout(() => el.remove(), 10000);
+            setTimeout(() => el.remove(), 15000);
         }
     });
 
-    // 4. LÓGICA DE DÍAS (CONTADOR)
+    // 4. ACTUALIZAR CONTADORES (Fechas 2025)
     function actualizarContadores() {
         const hoy = new Date();
-        // Meses en JS: Enero es 0, Agosto es 7, Septiembre es 8, Diciembre es 11
-        const f1 = new Date(2025, 7, 19); 
-        const f2 = new Date(2025, 8, 23);      
-        const f3 = new Date(2025, 11, 7);       
-
-        const diff = (f) => {
-            const tiempo = hoy - f;
-            return Math.floor(tiempo / (1000 * 60 * 60 * 24));
-        };
-
-        document.getElementById('days-met').innerText = diff(f1);
-        document.getElementById('days-out').innerText = diff(f2);
-        document.getElementById('days-gf').innerText = diff(f3);
+        const diff = (f) => Math.floor((hoy - f) / (1000 * 60 * 60 * 24));
+        document.getElementById('days-met').innerText = diff(new Date(2025, 7, 19));
+        document.getElementById('days-out').innerText = diff(new Date(2025, 8, 23));
+        document.getElementById('days-gf').innerText = diff(new Date(2025, 11, 7));
     }
-
-    // Ejecutar al cargar
     actualizarContadores();
 
-    // 5. FUNCIONES DE INTERFAZ
+    // 5. FUNCIONES VISOR FOTOS
+    function abrirFoto(src) {
+        document.getElementById('foto-grande').src = src;
+        document.getElementById('visor-fotos').style.display = 'flex';
+    }
+    function cerrarFoto() { document.getElementById('visor-fotos').style.display = 'none'; }
+
+    // 6. UI OVERLAY
     function darDeBaja() { document.getElementById('forever-overlay').style.display = 'flex'; }
     function cerrar() { document.getElementById('forever-overlay').style.display = 'none'; }
-    </script>
+</script>
 </body>
 </html>
