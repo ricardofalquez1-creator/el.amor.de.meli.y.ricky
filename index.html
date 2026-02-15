@@ -47,54 +47,59 @@
         .days-value { font-size: 2.8rem; font-weight: 900; color: var(--pink); margin: 0; line-height: 1; }
         .label { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-top: 8px; color: #555; padding: 0 10px; }
 
-        /* --- CARRUSEL DINÁMICO CORREGIDO --- */
-        .carousel-container { 
-            width: 220px; /* Ancho de una polaroid + márgenes */
-            height: 300px; 
-            z-index: 10; 
-            perspective: 1000px; 
-            margin-bottom: 20px; 
-            overflow: hidden; /* Oculta las fotos que no están en el centro */
-            border-radius: 10px;
-        }
+/* --- CARRUSEL TIPO CINTA DE CINE --- */
+.carousel-container { 
+    width: 100%; 
+    max-width: 800px; /* Ahora es más ancho para que se luzcan las fotos */
+    height: 320px; 
+    z-index: 10; 
+    margin: 20px 0; 
+    overflow: hidden; 
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
 
-        .carousel-track { 
-            display: flex; 
-            width: 1000%; /* Para 10 fotos */
-            height: 100%; 
-            animation: slide-10 30s infinite ease-in-out; /* Movimiento automático */
-        }
+.carousel-track { 
+    display: flex; 
+    width: fit-content; /* Se ajusta al contenido total */
+    animation: scroll-slow 40s linear infinite; /* Movimiento constante y suave */
+}
 
-        .polaroid { 
-            background: white; 
-            padding: 10px 10px 40px 10px; 
-            margin: 10px; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
-            border-radius: 2px; 
-            flex-shrink: 0; /* Impide que las fotos se encojan */
-            width: 200px; /* Tamaño fijo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.carousel-track:hover {
+    animation-play-state: paused; /* Se detiene si ella pone el mouse encima para ver mejor */
+}
 
-        .polaroid img { width: 180px; height: 180px; object-fit: cover; border: 1px solid #f0f0f0; cursor: pointer; }
+.polaroid { 
+    background: white; 
+    padding: 10px 10px 40px 10px; 
+    margin: 0 15px; /* Espacio entre fotos */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15); 
+    border-radius: 2px; 
+    flex-shrink: 0; 
+    width: 200px;
+    transform: rotate(calc(-3deg + 6deg * Math.random())); /* Rotación juguetona */
+    transition: transform 0.3s;
+}
 
-        /* Animación para 10 fotos: cada una ocupa el 10% del track */
-        @keyframes slide-10 {
-            0%, 7% { transform: translateX(0); }
-            10%, 17% { transform: translateX(-10%); }
-            20%, 27% { transform: translateX(-20%); }
-            30%, 37% { transform: translateX(-30%); }
-            40%, 47% { transform: translateX(-40%); }
-            50%, 57% { transform: translateX(-50%); }
-            60%, 67% { transform: translateX(-60%); }
-            70%, 77% { transform: translateX(-70%); }
-            80%, 87% { transform: translateX(-80%); }
-            90%, 97% { transform: translateX(-90%); }
-            100% { transform: translateX(0); }
-        }
+.polaroid:hover {
+    transform: scale(1.1) rotate(0deg) !important;
+    z-index: 50;
+}
 
+.polaroid img { 
+    width: 180px; 
+    height: 180px; 
+    object-fit: cover; 
+    border: 1px solid #f0f0f0; 
+    cursor: pointer; 
+}
+
+/* Animación de desplazamiento infinito */
+@keyframes scroll-slow {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-230px * 10)); } /* 200px + márgenes x 10 fotos */
+}
         /* --- BOTÓN JUGAR --- */
         .play-btn {
             background: #5d3fd3; color: white; border: none; padding: 15px 40px;
@@ -144,19 +149,31 @@
         </div>
     </div>
 
-    <div class="carousel-container">
-        <div class="carousel-track">
-            <div class="polaroid"><img src="https://i.postimg.cc/fWrMb98y/Foto1.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/fLbhzzXX/Foto3.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/g0mW7q2s/Foto2.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/N0pWP3V9/Foto9.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/7Pdy4yLM/Foto6.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/Qtzvjpjr/Foto10.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/mkvxy7nX/Foto5.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/J4XC4dD1/Foto7.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/nzwfMyGc/Foto4.jpg" onclick="abrirFoto(this.src)"></div>
-            <div class="polaroid"><img src="https://i.postimg.cc/gJqqBFN2/Foto11.jpg" onclick="abrirFoto(this.src)"></div>
-        </div>
+<div class="carousel-container">
+    <div class="carousel-track">
+        <div class="polaroid"><img src="https://i.postimg.cc/fWrMb98y/Foto1.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/fLbhzzXX/Foto3.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/g0mW7q2s/Foto2.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/N0pWP3V9/Foto9.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/7Pdy4yLM/Foto6.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/Qtzvjpjr/Foto10.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/mkvxy7nX/Foto5.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/J4XC4dD1/Foto7.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/nzwfMyGc/Foto4.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/gJqqBFN2/Foto11.jpg" onclick="abrirFoto(this.src)"></div>
+        
+        <div class="polaroid"><img src="https://i.postimg.cc/fWrMb98y/Foto1.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/fLbhzzXX/Foto3.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/g0mW7q2s/Foto2.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/N0pWP3V9/Foto9.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/7Pdy4yLM/Foto6.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/Qtzvjpjr/Foto10.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/mkvxy7nX/Foto5.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/J4XC4dD1/Foto7.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/nzwfMyGc/Foto4.jpg" onclick="abrirFoto(this.src)"></div>
+        <div class="polaroid"><img src="https://i.postimg.cc/gJqqBFN2/Foto11.jpg" onclick="abrirFoto(this.src)"></div>
+    </div>
+</div>
     </div>
 
     <a href="https://view.genially.com/6991621c3d6d6d7dbf5e93a7/interactive-content-reto-8bits" target="_blank" class="play-btn">🎮 JUGAR</a>
