@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz San Valentin Mi Amor</title>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --dark: #1a1a1a;
+            --bg: #fff5f7;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--bg);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: var(--dark);
+            overflow: hidden; /* Evita scroll por las palabras flotantes */
+            position: relative;
+        }
+
+        /* --- FONDO DE PALABRAS --- */
+        #word-wall {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none; /* Permite hacer clic a través de las palabras */
+        }
+
+        .floating-word {
+            position: absolute;
+            color: var(--pink);
+            font-weight: bold;
+            opacity: 0;
+            white-space: nowrap;
+            font-size: 1.2rem;
+            animation: floatUp 10s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
+        }
+
+        h1 { font-weight: 300; letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; font-size: 1rem; opacity: 0.7; z-index: 10; }
+
+        .dashboard {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .heart-clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .heart-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            fill: white;
+            filter: drop-shadow(0 10px 20px rgba(255, 77, 109, 0.15));
+            z-index: -1;
+            transform-origin: center;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.08); }
+            45% { transform: scale(1.15); }
+        }
+
+        .slow   { animation: heartbeat 2.5s infinite ease-in-out; }
+        .medium { animation: heartbeat 1.8s infinite ease-in-out; }
+        .fast   { animation: heartbeat 1.2s infinite ease-in-out; }
+
+        .days-value { font-size: 2.5rem; font-weight: 900; color: var(--pink); margin: 0; }
+        .label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px; max-width: 130px; }
+
+        /* --- INPUT UI --- */
+        .input-container {
+            margin-top: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: white;
+            padding: 8px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        input {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            outline: none;
+            width: 180px;
+            font-size: 14px;
+        }
+
+        .send-btn {
+            background: var(--pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .send-btn:hover { transform: scale(1.05); }
+
+        .btn-unsubscribe {
+            margin-top: 50px;
+            padding: 8px 15px;
+            background: none;
+            border: 1px dashed #ccc;
+            color: #999;
+            cursor: pointer;
+            font-size: 10px;
+            z-index: 10;
+        }
+
+        #forever-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--pink);
+            color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #forever-overlay h2 { font-size: 3rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="word-wall"></div>
+
+    <h1>Contador de nuestra historia</h1>
+
+    <div class="dashboard">
+        <div class="heart-clock">
+            <svg class="heart-shape slow" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+            <p class="days-value" id="days-met">0</p>
+            <p class="label">Días desde que te vi por primera vez</p>
+        </div>
+
+        <div class="heart-clock">
+            <svg class="heart-shape medium" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+            <p class="days-value" id="days-out">0</p>
+            <p class="label">Días desde nuestra primera cita</p>
+        </div>
+
+        <div class="heart-clock">
+            <svg class="heart-shape fast" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+            <p class="days-value" id="days-gf">0</p>
+            <p class="label">Días desde que somos oficialmente nosotros</p>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <input type="text" id="mensajeInput" placeholder="Escríbele algo...">
+        <button class="send-btn" onclick="enviarMensaje()">Postear</button>
+    </div>
+
+    <button class="btn-unsubscribe" onclick="darDeBaja()">Quiero desuscribirme</button>
+
+    <div id="forever-overlay">
+        <h2>ERROR 237</h2>
+        <p style="font-size: 1.2rem; letter-spacing: 2px;">¡Patricia Fernández, venga para acá!</p>
+        <p style="max-width: 400px; margin-top: 20px;">Perdóneme pero discúlpeme, esta opción no está disponible, ya que mi amor por usted es infinito.</p>
+        <button onclick="cerrar()" style="margin-top:30px; padding: 10px 20px; cursor:pointer;">Volver al contador</button>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            databaseURL: "TU_DATABASE_URL",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // --- LÓGICA DE MENSAJES ---
+   function enviarMensaje() {
+    const input = document.getElementById('mensajeInput');
+    const llaveMaestra = "CocacolaSprite"; // La misma que pusiste en las reglas
+
+    if(input.value.trim() !== "") {
+        database.ref('muro').push({
+            texto: input.value,
+            x: Math.random() * 80 + 10,
+            pass: llaveMaestra // Enviamos la clave para que Firebase nos deje escribir
+        });
+        input.value = '';
+    }
+}}
+
+        // Escuchar nuevos mensajes y crearlos en el fondo
+        database.ref('muro').on('child_added', (snapshot) => {
+            const data = snapshot.val();
+            const el = document.createElement('div');
+            el.className = 'floating-word';
+            el.innerText = data.texto;
+            el.style.left = data.x + '%';
+            document.getElementById('word-wall').appendChild(el);
+            
+            // Eliminar del DOM después de que termine la animación para no saturar
+            setTimeout(() => el.remove(), 10000);
+        });
+
+        // --- LÓGICA DE FECHAS ---
+        const f1 = new Date(2025, 7, 19); 
+        const f2 = new Date(2025, 8, 23);      
+        const f3 = new Date(2025, 11, 7);       
+
+        const calc = (f) => Math.floor((new Date() - f) / 86400000);
+
+        document.getElementById('days-met').innerText = calc(f1);
+        document.getElementById('days-out').innerText = calc(f2);
+        document.getElementById('days-gf').innerText = calc(f3);
+
+        function darDeBaja() { document.getElementById('forever-overlay').style.display = 'flex'; }
+        function cerrar() { document.getElementById('forever-overlay').style.display = 'none'; }
+    </script>
+</body>
+</html>
