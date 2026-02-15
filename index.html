@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz San Valentin Mi Amor</title>
+    <title>Feliz San Valentín Mi Amor</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
@@ -15,149 +15,58 @@
         }
 
         body {
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: var(--bg);
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: var(--dark);
-            overflow: hidden; /* Evita scroll por las palabras flotantes */
-            position: relative;
+            margin: 0; padding: 20px; min-height: 100vh;
+            background-color: var(--bg); font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden; position: relative; color: var(--dark);
         }
 
-        /* --- FONDO DE PALABRAS --- */
-        #word-wall {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none; /* Permite hacer clic a través de las palabras */
-        }
-
+        /* --- MURO DE PALABRAS --- */
+        #word-wall { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .floating-word {
-            position: absolute;
-            color: var(--pink);
-            font-weight: bold;
-            opacity: 0;
-            white-space: nowrap;
-            font-size: 1.2rem;
-            animation: floatUp 10s linear forwards;
+            position: absolute; color: var(--pink); font-weight: bold; opacity: 0;
+            white-space: nowrap; font-size: 1.2rem; animation: floatUp 10s linear forwards;
         }
-
         @keyframes floatUp {
             0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.2; }
-            90% { opacity: 0.2; }
+            10% { opacity: 0.25; }
+            90% { opacity: 0.25; }
             100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
         }
 
         h1 { font-weight: 300; letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; font-size: 1rem; opacity: 0.7; z-index: 10; }
 
-        .dashboard {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            z-index: 10;
-        }
-
-        .heart-clock {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .heart-shape {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            fill: white;
-            filter: drop-shadow(0 10px 20px rgba(255, 77, 109, 0.15));
-            z-index: -1;
-            transform-origin: center;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.08); }
-            45% { transform: scale(1.15); }
-        }
-
-        .slow   { animation: heartbeat 2.5s infinite ease-in-out; }
+        /* --- DASHBOARD --- */
+        .dashboard { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; z-index: 10; }
+        .heart-clock { position: relative; width: 180px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .heart-shape { position: absolute; width: 100%; height: 100%; fill: white; filter: drop-shadow(0 10px 20px rgba(255, 77, 109, 0.15)); z-index: -1; transform-origin: center; }
+        
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .slow { animation: heartbeat 2.5s infinite ease-in-out; }
         .medium { animation: heartbeat 1.8s infinite ease-in-out; }
-        .fast   { animation: heartbeat 1.2s infinite ease-in-out; }
+        .fast { animation: heartbeat 1.2s infinite ease-in-out; }
 
-        .days-value { font-size: 2.5rem; font-weight: 900; color: var(--pink); margin: 0; }
-        .label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px; max-width: 130px; }
+        .days-value { font-size: 2.2rem; font-weight: 900; color: var(--pink); margin: 0; }
+        .label { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; max-width: 140px; line-height: 1.2; }
 
-        /* --- INPUT UI --- */
+        /* --- INPUT --- */
         .input-container {
-            margin-top: 40px;
-            display: flex;
-            gap: 10px;
-            z-index: 20;
-            background: white;
-            padding: 8px;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 40px; display: flex; gap: 10px; z-index: 20;
+            background: white; padding: 8px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
+        input { border: none; padding: 10px 20px; border-radius: 50px; outline: none; width: 180px; font-size: 14px; }
+        .send-btn { background: var(--pink); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
 
-        input {
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            outline: none;
-            width: 180px;
-            font-size: 14px;
-        }
+        .btn-unsubscribe { margin-top: 50px; background: none; border: 1px dashed #ccc; color: #999; cursor: pointer; font-size: 10px; z-index: 10; padding: 8px 15px; }
 
-        .send-btn {
-            background: var(--pink);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .send-btn:hover { transform: scale(1.05); }
-
-        .btn-unsubscribe {
-            margin-top: 50px;
-            padding: 8px 15px;
-            background: none;
-            border: 1px dashed #ccc;
-            color: #999;
-            cursor: pointer;
-            font-size: 10px;
-            z-index: 10;
-        }
-
+        /* --- OVERLAY DE ERROR --- */
         #forever-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--pink);
-            color: white;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            text-align: center;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--pink); color: white; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1000; text-align: center; padding: 20px;
         }
-
-        #forever-overlay h2 { font-size: 3rem; margin-bottom: 10px; }
+        #forever-overlay h2 { font-size: 4rem; margin: 0; font-weight: 900; }
+        .back-btn { margin-top: 30px; padding: 12px 25px; border: 2px solid white; background: transparent; color: white; cursor: pointer; font-weight: bold; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -168,27 +77,19 @@
 
     <div class="dashboard">
         <div class="heart-clock">
-            <svg class="heart-shape slow" viewBox="0 0 32 29.6">
-                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-            </svg>
+            <svg class="heart-shape slow" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-met">0</p>
-            <p class="label">Días desde que te vi por primera vez</p>
+            <p class="label">Desde que te vi por primera vez</p>
         </div>
-
         <div class="heart-clock">
-            <svg class="heart-shape medium" viewBox="0 0 32 29.6">
-                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-            </svg>
+            <svg class="heart-shape medium" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-out">0</p>
-            <p class="label">Días desde nuestra primera cita</p>
+            <p class="label">Desde nuestra primera cita</p>
         </div>
-
         <div class="heart-clock">
-            <svg class="heart-shape fast" viewBox="0 0 32 29.6">
-                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-            </svg>
+            <svg class="heart-shape fast" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
             <p class="days-value" id="days-gf">0</p>
-            <p class="label">Días desde que somos oficialmente nosotros</p>
+            <p class="label">Desde que somos oficialmente nosotros</p>
         </div>
     </div>
 
@@ -201,9 +102,9 @@
 
     <div id="forever-overlay">
         <h2>ERROR 237</h2>
-        <p style="font-size: 1.2rem; letter-spacing: 2px;">¡Patricia Fernández, venga para acá!</p>
-        <p style="max-width: 400px; margin-top: 20px;">Perdóneme pero discúlpeme, esta opción no está disponible, ya que mi amor por usted es infinito.</p>
-        <button onclick="cerrar()" style="margin-top:30px; padding: 10px 20px; cursor:pointer;">Volver al contador</button>
+        <p style="font-size: 1.5rem; letter-spacing: 2px; font-weight: bold;">¡Patricia Fernández, venga para acá!</p>
+        <p style="max-width: 450px; margin-top: 20px; line-height: 1.6;">Perdóneme pero discúlpeme, esta opción no está disponible, ya que mi amor por usted es infinito.</p>
+        <button class="back-btn" onclick="cerrar()">Volver al contador</button>
     </div>
 
     <script>
@@ -220,35 +121,33 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // --- LÓGICA DE MENSAJES ---
-   function enviarMensaje() {
-    const input = document.getElementById('mensajeInput');
-    const llaveMaestra = "CocacolaSprite"; // La misma que pusiste en las reglas
+        // --- MENSAJES ---
+        function enviarMensaje() {
+            const input = document.getElementById('mensajeInput');
+            const llaveMaestra = "CocacolaSprite"; 
+            if(input.value.trim() !== "") {
+                database.ref('muro').push({
+                    texto: input.value,
+                    x: Math.random() * 80 + 10,
+                    pass: llaveMaestra 
+                });
+                input.value = '';
+            }
+        }
 
-    if(input.value.trim() !== "") {
-        database.ref('muro').push({
-            texto: input.value,
-            x: Math.random() * 80 + 10,
-            pass: llaveMaestra // Enviamos la clave para que Firebase nos deje escribir
-        });
-        input.value = '';
-    }
-}}
-
-        // Escuchar nuevos mensajes y crearlos en el fondo
         database.ref('muro').on('child_added', (snapshot) => {
             const data = snapshot.val();
-            const el = document.createElement('div');
-            el.className = 'floating-word';
-            el.innerText = data.texto;
-            el.style.left = data.x + '%';
-            document.getElementById('word-wall').appendChild(el);
-            
-            // Eliminar del DOM después de que termine la animación para no saturar
-            setTimeout(() => el.remove(), 10000);
+            if(data && data.texto) {
+                const el = document.createElement('div');
+                el.className = 'floating-word';
+                el.innerText = data.texto;
+                el.style.left = data.x + '%';
+                document.getElementById('word-wall').appendChild(el);
+                setTimeout(() => el.remove(), 10000);
+            }
         });
 
-        // --- LÓGICA DE FECHAS ---
+        // --- FECHAS ---
         const f1 = new Date(2025, 7, 19); 
         const f2 = new Date(2025, 8, 23);      
         const f3 = new Date(2025, 11, 7);       
@@ -264,4 +163,3 @@
     </script>
 </body>
 </html>
-
